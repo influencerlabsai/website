@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Influencer Labs | Coming Soon</title>
+    <style>
+        :root {
+            --brand-red: #FF5050;
+            --dark-bg: #0f172a;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--dark-bg);
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* Subtle background glow */
+        body::before {
+            content: "";
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: var(--brand-red);
+            filter: blur(150px);
+            opacity: 0.15;
+            z-index: -1;
+            top: 20%;
+        }
+
+        .container {
+            max-width: 550px;
+            width: 90%;
+            padding: 40px;
+            background: var(--glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Logo Image Section */
+        .logo-wrapper {
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .logo-image {
+            width: 100px; /* Adjust size as needed */
+            height: 100px; /* Adjust size as needed */
+            object-fit: contain;
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+            /* Placeholder styling if image is missing */
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .logo-image:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-text {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(to bottom, #ffffff, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .tagline {
+            font-size: 18px;
+            color: #94a3b8;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .tagline span {
+            color: var(--brand-red);
+            font-weight: 600;
+        }
+
+        .subscribe {
+            display: flex;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 6px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        input[type="email"] {
+            flex-grow: 1;
+            padding: 14px 18px;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            font-size: 15px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            background-color: var(--brand-red);
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        button:hover {
+            background-color: #ff3333;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(255, 80, 80, 0.4);
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 13px;
+            color: #64748b;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="logo-wrapper">
+            <img src="logo.png" alt="Influencer Labs Logo" class="logo-image">
+        </div>
+
+        <div class="logo-text">Influencer Labs</div>
+        
+        <div class="tagline">
+            Building the next generation of <span>Intelligent</span> influencers. 
+            Authoritative, data-driven, and completely different.
+        </div>
+
+        <form class="subscribe">
+            <input type="email" placeholder="Your email address" required />
+            <button type="submit">Get Access</button>
+        </form>
+
+        <div class="footer">
+            Launching 2026
+        </div>
+    </div>
+
+</body>
