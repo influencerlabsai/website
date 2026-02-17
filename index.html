@@ -61,7 +61,7 @@
             border-radius: 12px;
             transition: transform 0.3s ease;
             /* Placeholder styling if image is missing */
-            background-color: rgba(255, 255, 255, 0.05);
+            /* background-color: rgba(255, 255, 255, 0.05); */
         }
 
         .logo-image:hover {
@@ -99,6 +99,62 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        .choices {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .choice-card {
+            width: 100%;
+            padding: 14px 12px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+            cursor: pointer;
+            text-align: left;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .choice-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 80, 80, 0.35);
+            box-shadow: 0 10px 24px rgba(255, 80, 80, 0.16);
+        }
+
+        .choice-title {
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            color: #e2e8f0;
+            line-height: 1.35;
+        }
+
+        .choice-chip {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #94a3b8;
+            background: rgba(148, 163, 184, 0.12);
+        }
+
+        .choice-card.is-selected {
+            border-color: rgba(255, 80, 80, 0.9);
+            background: linear-gradient(160deg, rgba(255, 80, 80, 0.22), rgba(255, 80, 80, 0.08));
+            box-shadow: 0 14px 28px rgba(255, 80, 80, 0.26);
+        }
+
+        .choice-card.is-selected .choice-chip {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.18);
+        }
+
         input[type="email"] {
             flex-grow: 1;
             padding: 14px 18px;
@@ -134,6 +190,19 @@
             letter-spacing: 1px;
             text-transform: uppercase;
         }
+
+        .status {
+            margin-top: 12px;
+            font-size: 14px;
+            min-height: 20px;
+            color: #94a3b8;
+        }
+
+        @media (max-width: 720px) {
+            .choices {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -150,14 +219,81 @@
             Authoritative, data-driven, and completely different.
         </div>
 
-        <form class="subscribe">
-            <input type="email" placeholder="Your email address" required />
-            <button type="submit">Get Access</button>
+        <div class="choices" aria-label="Interest type">
+            <button type="button" class="choice-card" data-interest="influencer">
+                <span class="choice-title">I am influencer</span>
+                <!-- <span class="choice-chip">Influencer</span> -->
+            </button>
+            <button type="button" class="choice-card" data-interest="need">
+                <span class="choice-title">I want an influencer</span>
+                <!-- <span class="choice-chip">Need</span> -->
+            </button>
+            <button type="button" class="choice-card" data-interest="curious">
+                <span class="choice-title">I am curious</span>
+                <!-- <span class="choice-chip">Curious</span> -->
+            </button>
+        </div>
+
+        <form class="subscribe" id="subscribe-form">
+            <input type="email" id="email-input" placeholder="Your email address" required />
+            <input type="hidden" id="interest-input" name="interest" value="">
+            <button type="submit">Keep me updated</button>
         </form>
+        <div class="status" id="status-message" aria-live="polite"></div>
 
         <div class="footer">
             Launching 2026
         </div>
     </div>
 
+    <script>
+        const form = document.getElementById('subscribe-form');
+        const emailInput = document.getElementById('email-input');
+        const interestInput = document.getElementById('interest-input');
+        const statusMessage = document.getElementById('status-message');
+        const submitButton = form.querySelector('button[type="submit"]');
+        const choiceCards = document.querySelectorAll('.choice-card');
+
+        choiceCards.forEach((card) => {
+            card.addEventListener('click', () => {
+                choiceCards.forEach((item) => item.classList.remove('is-selected'));
+                card.classList.add('is-selected');
+                interestInput.value = card.dataset.interest;
+                statusMessage.textContent = '';
+            });
+        });
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const email = emailInput.value.trim();
+            const interest = interestInput.value;
+
+            if (!interest) {
+                statusMessage.textContent = 'Please choose one option before submitting.';
+                return;
+            }
+
+            statusMessage.textContent = 'Submitting...';
+            submitButton.disabled = true;
+
+            try {
+                const response = await fetch('/api/subscribe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, interest })
+                });
+
+                const data = await response.json();
+                statusMessage.textContent = data.message || 'Request completed.';
+
+                if (response.ok) {
+                    form.reset();
+                }
+            } catch (error) {
+                statusMessage.textContent = 'Unable to submit right now. Please try again.';
+            } finally {
+                submitButton.disabled = false;
+            }
+        });
+    </script>
 </body>
